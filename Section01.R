@@ -158,14 +158,14 @@ ggplot(data,aes(x=V2,fill=cut(..x..,9)))+                      # fill= cut(..변
                          vjust=-0.5, 
                          geom = "text",
                          family="baedal",
-                         size=10) +        
+                         size=7) +        
         scale_fill_discrete(h = c(180, 360), c = 150, l = 80) +
         theme_bw(base_family="baedal",base_size=20) +
-        labs(title='연령별 분포 히스토그램(빈도)',x='연령',y='빈도') +
+        labs(title='(빈도)연령별 분포 히스토그램_단위:명',x='연령',y='빈도(명)') +
         theme(plot.title = element_text(family="baedal",
                                         face = "bold",
                                         hjust = 0.5, 
-                                        size = 40, 
+                                        size = 30, 
                                         color = "black")) 
 
 
@@ -181,7 +181,7 @@ ggplot(data,aes(x=V2,fill=cut(..x..,9)))+                      # fill= cut(..변
         scale_x_continuous(breaks=seq(0,90,10)) +              # 숫자 나누는 기준
         scale_fill_discrete(h = c(180, 360), c = 150, l = 80) +
         theme_bw(base_family="baedal",base_size=20) +
-        labs(title='연령별 분포 히스토그램(밀도)',x='연령',y='밀도') +
+        labs(title='(밀도)연령별 분포 히스토그램',x='연령',y='밀도') +
         theme(plot.title = element_text(family="baedal",
                                         face = "bold",
                                         hjust = 0.5, 
