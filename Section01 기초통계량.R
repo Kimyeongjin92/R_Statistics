@@ -82,7 +82,7 @@ View(data)
 
 
 ### ===================================================================================
-###  1. 기초통계량 50Page  ===========================================================
+###  기초통계량 50Page  ===========================================================
 ### ===================================================================================
 
 library(ggplot2)
@@ -128,11 +128,43 @@ ggplot(df_Nile,aes(x=year,y=flood))+
 ##  3. 막대그래프: data.rda 높이
 load("data.rda")
 tableV5 <- table(data$V5)
+
 barplot(tableV5,main="출생아(남자)별 빈도",xlab="출생아수",ylab="빈도")
 # height :막대의 높이, width : 넓이
 
 tableV1.V4 <- table(data$V1,data$V4)
 barplot(tableV1.V4,main="학력에 따른 성별 인원수",xlab="학력",ylab="빈도")
+
+
+##  3-2. ggplot 막대그래프: data.rda 높이
+ggplot(data,aes(x=V5,fill=..count..))+
+        geom_bar(col="black",size=1) +
+        scale_x_continuous(breaks=seq(0,12,1))+
+        scale_y_continuous(breaks=seq(0,70000,10000))+
+        stat_count(aes(label=..count..),
+                   vjust=-0.5, 
+                   geom = "text",
+                   family="baedal",
+                   size=7) +
+        labs(title="출생아(남자)별 빈도",x="출생아수",y="빈도")+
+        theme_bw(base_family = "baedal",
+                 base_size = 20,
+                 base_rect_size = 3,
+                 base_line_size = 1)+
+        theme(plot.title = element_text(family="baedal",
+                                        face="bold",
+                                        hjust=0.5,
+                                        vjust=2,
+                                        size=30))
+
+ggplot(data,aes(x=V1:V4,fill=..count..)) +
+        geom_bar()
+
+
+
+
+
+
 
 
 ##  4. 히스토그램: data.rda 폭
