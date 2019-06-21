@@ -1,0 +1,148 @@
+---
+title: "[과제9] 다양한 분포"
+author: "김영진 "
+date: '2019 6 21(금) '
+output: html_document
+---
+```{r}
+
+#  1) χ2-분포 (카이제곱분포, chi-squared distrbution) =============================
+set.seed(9)
+n <- 1000
+b.4.mean   <- rep(NA,n)
+b.16.mean  <- rep(NA,n)
+b.64.mean  <- rep(NA,n)
+b.256.mean <- rep(NA,n)
+
+for(i in 1:n){
+  b.4.mean[i]   <- mean(rchisq(4,   df=10))
+  b.16.mean[i]  <- mean(rchisq(16,  df=10))
+  b.64.mean[i]  <- mean(rchisq(64,  df=10))
+  b.256.mean[i] <- mean(rchisq(256, df=10))
+}
+
+windowsFonts(baedal=windowsFont("배달의민족 도현"))
+
+par(mfrow=c(2,2),family="baedal",oma=c(0,0,4,0))
+hist(b.4.mean,prob=T,xlim=c(0,20),main="표본 크기 :4",
+     ylab="",xlab="",col="cadetblue2",border="black",)
+x1 <- seq(min(b.4.mean),max(b.4.mean),length=1000)
+y1 <- dnorm(x=x1,mean=10,sd=sqrt(20)/sqrt(4)) 
+lines(x1,y1,lty=2,lwd=2,col="red")
+
+hist(b.16.mean,prob=T,xlim=c(0,20),main="표본 크기 :16",
+     ylab="",xlab="",col="cadetblue2",border="black",)
+x2 <- seq(min(b.16.mean),max(b.16.mean),length=1000)
+y2 <- dnorm(x=x2,mean=10,sd=sqrt(20)/sqrt(16))
+lines(x2,y2,lty=2,lwd=2,col="red")
+
+hist(b.64.mean,prob=T,xlim=c(0,20),main="표본 크기 :64",
+     ylab="",xlab="",col="cadetblue2",border="black",)
+x3 <- seq(min(b.64.mean),max(b.64.mean),length=1000)
+y3 <- dnorm(x=x3,mean=10,sd=sqrt(20)/sqrt(64))    
+lines(x3,y3,lty=2,lwd=2,col="red")
+
+hist(b.256.mean,prob=T,xlim=c(0,20),main="표본 크기 :256",
+     ylab="",xlab="",col="cadetblue2",border="black",)
+x4 <- seq(min(b.256.mean),max(b.256.mean),length=1000)
+y4 <- dnorm(x=x4,mean=10,sd=sqrt(20)/sqrt(264))     
+lines(x4,y4,lty=2,lwd=2,col="red")
+
+mtext("χ2-분포",outer=TRUE,cex=2.5,col="skyblue2")
+
+#  2) t-분포 (student's t-distrbution)  ===========================================
+set.seed(9)
+n <- 1000
+b.2.mean  <- rep(NA,n)
+b.4.mean  <- rep(NA,n)
+b.8.mean  <- rep(NA,n)
+b.16.mean <- rep(NA,n)
+
+for(i in 1:n){
+  b.2.mean[i]  <- mean(rt(2,  df=30))
+  b.4.mean[i]  <- mean(rt(4,  df=30))
+  b.8.mean[i]  <- mean(rt(8,  df=30))
+  b.16.mean[i] <- mean(rt(16, df=30))
+}
+
+windowsFonts(baedal=windowsFont("배달의민족 도현"))
+
+par(mfrow=c(2,2),family="baedal",oma=c(0,0,4,0))
+hist(b.2.mean,prob=T,xlim=c(-3,3),main="표본 크기 :2",
+     ylab="",xlab="",col="pink1",border="black",)
+x1 <- seq(min(b.2.mean),max(b.2.mean),length=1000)
+y1 <- dnorm(x=x1,mean=0,sd=sqrt(30/28)/sqrt(2)) 
+lines(x1,y1,lty=2,lwd=2,col="red")
+
+hist(b.4.mean,prob=T,xlim=c(-3,3),main="표본 크기 :4",
+     ylab="",xlab="",col="pink1",border="black",)
+x2 <- seq(min(b.4.mean),max(b.4.mean),length=1000)
+y2 <- dnorm(x=x2,mean=0,sd=sqrt(30/28)/sqrt(4))
+lines(x2,y2,lty=2,lwd=2,col="red")
+
+hist(b.8.mean,prob=T,xlim=c(-3,3),main="표본 크기 :8",
+     ylab="",xlab="",col="pink1",border="black",)
+x3 <- seq(min(b.8.mean),max(b.8.mean),length=1000)
+y3 <- dnorm(x=x3,mean=0,sd=sqrt(30/28)/sqrt(8))    
+lines(x3,y3,lty=2,lwd=2,col="red")
+
+hist(b.16.mean,prob=T,xlim=c(-3,3),main="표본 크기 :16",
+     ylab="",xlab="",col="pink1",border="black",)
+x4 <- seq(min(b.16.mean),max(b.16.mean),length=1000)
+y4 <- dnorm(x=x4,mean=0,sd=sqrt(30/28)/sqrt(16))     
+lines(x4,y4,lty=2,lwd=2,col="red")
+
+mtext("t-분포",outer=TRUE,cex=2.5,col="pink1")
+
+
+#  3) F-분포 (F-distrbution)  =====================================================
+set.seed(9)
+x <- 1000
+n <- 10
+m <- 20
+b.2.mean  <- rep(NA,x)
+b.4.mean  <- rep(NA,x)
+b.8.mean  <- rep(NA,x)
+b.16.mean <- rep(NA,x)
+
+for(i in 1:x){
+  b.2.mean[i]  <- mean(rf(2,  df1=n,df2=m))
+  b.4.mean[i]  <- mean(rf(4,  df1=n,df2=m))
+  b.8.mean[i]  <- mean(rf(8,  df1=n,df2=m))
+  b.16.mean[i] <- mean(rf(16, df1=n,df2=m))
+}
+
+windowsFonts(baedal=windowsFont("배달의민족 도현"))
+
+par(mfrow=c(2,2),family="baedal",oma=c(0,0,4,0))
+hist(b.2.mean,prob=T,xlim=c(-1,3),main="표본 크기 :2",
+     ylab="",xlab="",col="gold",border="black",)
+x1 <- seq(min(b.2.mean),max(b.2.mean),length=1000)
+y1 <- dnorm(x=x1,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(2)) ) 
+lines(x1,y1,lty=2,lwd=2,col="red")
+
+hist(b.4.mean,prob=T,xlim=c(-1,3),main="표본 크기 :4",
+     ylab="",xlab="",col="gold",border="black",)
+x2 <- seq(min(b.4.mean),max(b.4.mean),length=1000)
+y2 <- dnorm(x=x2,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(4)) ) 
+lines(x2,y2,lty=2,lwd=2,col="red")
+
+hist(b.8.mean,prob=T,xlim=c(-1,3),main="표본 크기 :8",
+     ylab="",xlab="",col="gold",border="black",)
+x3 <- seq(min(b.8.mean),max(b.8.mean),length=1000)
+y3 <- dnorm(x=x3,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(8)) ) 
+lines(x3,y3,lty=2,lwd=2,col="red")
+
+hist(b.16.mean,prob=T,xlim=c(-1,3),main="표본 크기 :16",
+     ylab="",xlab="",col="gold",border="black",)
+x4 <- seq(min(b.16.mean),max(b.16.mean),length=1000)
+y4 <- dnorm(x=x4,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(16)) ) 
+lines(x4,y4,lty=2,lwd=2,col="red")
+
+mtext("F-분포",outer=TRUE,cex=2.5,col="gold")
+
+
+
+```
+
+
