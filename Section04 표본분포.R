@@ -171,7 +171,7 @@ x4 <- seq(min(b.256.mean),max(b.256.mean),length=1000)
 y4 <- dnorm(x=x4,mean=10,sd=sqrt(20)/sqrt(264))     
 lines(x4,y4,lty=2,lwd=2,col="red")
 
-mtext("χ2-분포",outer=TRUE,cex=2.5,col="skyblue2")
+mtext("χ2-분포(df:10)",outer=TRUE,cex=2.5,col="skyblue2")
 
 #  2) t-분포 (student's t-distrbution)  ===========================================
 set.seed(9)
@@ -221,7 +221,7 @@ x4 <- seq(min(b.16.mean),max(b.16.mean),length=1000)
 y4 <- dnorm(x=x4,mean=0,sd=sqrt(30/28)/sqrt(16))     
 lines(x4,y4,lty=2,lwd=2,col="red")
 
-mtext("t-분포",outer=TRUE,cex=2.5,col="pink1")
+mtext("t-분포(df:30)",outer=TRUE,cex=2.5,col="pink1")
 
 
 #  3) F-분포 (F-distrbution)  =====================================================
@@ -274,7 +274,7 @@ x4 <- seq(min(b.16.mean),max(b.16.mean),length=1000)
 y4 <- dnorm(x=x4,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ) )/( sqrt(16) )) 
 lines(x4,y4,lty=2,lwd=2,col="red")
 
-mtext("F-분포",outer=TRUE,cex=2.5,col="gold")
+mtext("F-분포(df1:10,df2:20)",outer=TRUE,cex=2.5,col="gold")
 
 
 

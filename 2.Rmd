@@ -1,11 +1,12 @@
 ---
-title: "[과제9] 다양한 분포"
-author: "김영진 "
+title: "[과제9] 표본분포 그래프 "
+author: "김영진"
 date: '2019 6 21(금) '
 output: html_document
 ---
-```{r}
 
+
+```{r}
 #  1) χ2-분포 (카이제곱분포, chi-squared distrbution) =============================
 set.seed(9)
 n <- 1000
@@ -48,7 +49,7 @@ x4 <- seq(min(b.256.mean),max(b.256.mean),length=1000)
 y4 <- dnorm(x=x4,mean=10,sd=sqrt(20)/sqrt(264))     
 lines(x4,y4,lty=2,lwd=2,col="red")
 
-mtext("χ2-분포",outer=TRUE,cex=2.5,col="skyblue2")
+mtext("χ2-분포(df:10)",outer=TRUE,cex=2.5,col="skyblue2")
 
 #  2) t-분포 (student's t-distrbution)  ===========================================
 set.seed(9)
@@ -92,7 +93,7 @@ x4 <- seq(min(b.16.mean),max(b.16.mean),length=1000)
 y4 <- dnorm(x=x4,mean=0,sd=sqrt(30/28)/sqrt(16))     
 lines(x4,y4,lty=2,lwd=2,col="red")
 
-mtext("t-분포",outer=TRUE,cex=2.5,col="pink1")
+mtext("t-분포(df:30)",outer=TRUE,cex=2.5,col="pink1")
 
 
 #  3) F-분포 (F-distrbution)  =====================================================
@@ -118,31 +119,28 @@ par(mfrow=c(2,2),family="baedal",oma=c(0,0,4,0))
 hist(b.2.mean,prob=T,xlim=c(-1,3),main="표본 크기 :2",
      ylab="",xlab="",col="gold",border="black",)
 x1 <- seq(min(b.2.mean),max(b.2.mean),length=1000)
-y1 <- dnorm(x=x1,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(2)) ) 
+y1 <- dnorm(x=x1,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ) )/( sqrt(2) )) 
 lines(x1,y1,lty=2,lwd=2,col="red")
 
 hist(b.4.mean,prob=T,xlim=c(-1,3),main="표본 크기 :4",
      ylab="",xlab="",col="gold",border="black",)
 x2 <- seq(min(b.4.mean),max(b.4.mean),length=1000)
-y2 <- dnorm(x=x2,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(4)) ) 
+y2 <- dnorm(x=x2,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ) )/( sqrt(4) )) 
 lines(x2,y2,lty=2,lwd=2,col="red")
 
 hist(b.8.mean,prob=T,xlim=c(-1,3),main="표본 크기 :8",
      ylab="",xlab="",col="gold",border="black",)
 x3 <- seq(min(b.8.mean),max(b.8.mean),length=1000)
-y3 <- dnorm(x=x3,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(8)) ) 
+y3 <- dnorm(x=x3,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ) )/( sqrt(8) )) 
 lines(x3,y3,lty=2,lwd=2,col="red")
 
 hist(b.16.mean,prob=T,xlim=c(-1,3),main="표본 크기 :16",
      ylab="",xlab="",col="gold",border="black",)
 x4 <- seq(min(b.16.mean),max(b.16.mean),length=1000)
-y4 <- dnorm(x=x4,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ))/(sqrt(16)) ) 
+y4 <- dnorm(x=x4,mean=(m/(m-2)),sd=( sqrt( ((2*m^2)*(n+m-2))/(n*(m-2)^2*(m-4)) ) )/( sqrt(16) )) 
 lines(x4,y4,lty=2,lwd=2,col="red")
 
-mtext("F-분포",outer=TRUE,cex=2.5,col="gold")
-
-
-
+mtext("F-분포(df1:10,df2:20)",outer=TRUE,cex=2.5,col="gold")
 ```
 
-
+```

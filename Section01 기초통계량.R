@@ -91,16 +91,28 @@ library(ggplot2)
 ##  1. 산점도: cars
 cars
 str(cars)
+windowsFonts(baedal=windowsFont("배달의민족 도현"))
 
 par(mfrow=c(1,2))
 plot(cars$speed, cars$dist,
      main="속도와 제동거리",xlab="속도(mph)",ylab="제동거리(ft)",
-     pch=1, col="red",)
+     pch=1, col="red",family="baedal")
 plot(jitter(cars$speed), jitter(cars$dist),
      main="속도와 제동거리",xlab="속도(mph)",ylab="제동거리(ft)",
-     pch=1, col="red",) 
-# ggplot() + geom_point(position="jitter") 혹은 geom_jitter()
+     pch=1, col="red",family="baedal") 
 
+##  1-1) ggplot 산점도
+ggplot(cars,aes(x=speed,y=dist)) + 
+        geom_point(position="jitter",shape=1,cex=3,col="red") +
+        labs(title="속도와 제동거리",x="속도(mph)",y="제동거리(ft)") +
+        theme_bw(base_family = "baedal",base_size = 20) +
+        theme(plot.title = element_text(hjust=0.5,
+                                        vjust=3,
+                                        color="deep skyblue",
+                                        size=30))
+
+# ggplot() + geom_point(position="jitter") 혹은 geom_jitter()
+#------------------------------------------------------------------------------------------
 
 ##  2. 시계열: Nile(1871~1970 연도별 나일강 유량)
 Nile
@@ -109,8 +121,8 @@ length(Nile)
 Nile
 
 # 1-1) Nile을 Dataframe으로 변환 (1)
-Nile<-as.data.frame(Nile)
-Nile$Year  <- c(1871:1970)
+#Nile<-as.data.frame(Nile)
+#Nile$Year  <- c(1871:1970)
 
 # 1-2) Nile을 Dataframe으로 변환 (2)
 df_Nile <- data.frame(year =time(Nile),
@@ -125,6 +137,8 @@ ggplot(df_Nile,aes(x=year,y=flood))+
         theme_bw(base_family="baedal",base_size = 20)
 
 
+#------------------------------------------------------------------------------------------
+
 ##  3. 막대그래프: data.rda 높이
 load("data.rda")
 tableV5 <- table(data$V5)
@@ -134,7 +148,6 @@ barplot(tableV5,main="출생아(남자)별 빈도",xlab="출생아수",ylab="빈
 
 tableV1.V4 <- table(data$V1,data$V4)
 barplot(tableV1.V4,main="학력에 따른 성별 인원수",xlab="학력",ylab="빈도")
-
 
 ##  3-2. ggplot 막대그래프: data.rda 높이
 ggplot(data,aes(x=V5,fill=..count..))+
@@ -157,14 +170,11 @@ ggplot(data,aes(x=V5,fill=..count..))+
                                         vjust=2,
                                         size=30))
 
-ggplot(data,aes(x=V1:V4,fill=..count..)) +
-        geom_bar()
+ggplot(data,aes(x=V4,fill=V1)) +
+        geom_bar(col="black")
 
 
-
-
-
-
+#------------------------------------------------------------------------------------------
 
 
 ##  4. 히스토그램: data.rda 폭
@@ -219,6 +229,9 @@ ggplot(data,aes(x=V2,fill=cut(..x..,9)))+                      # fill= cut(..변
                                         hjust = 0.5, 
                                         size = 40, 
                                         color = "black")) 
+
+
+#------------------------------------------------------------------------------------------
 
 
 ##  5. 원 그래프: data.rda 폭
