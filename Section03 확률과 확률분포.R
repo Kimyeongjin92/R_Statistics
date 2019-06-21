@@ -163,6 +163,7 @@ ggplot(aa1,aes(x=aa))+                      # fill= cut(..변수없을때 기준
                                   color = "black")) 
 
 #                                               
+
 install.packages('tidyverse')
 library(tidyverse)
 z <-  rnorm(1000, mean = 0, sd = 1)
@@ -172,7 +173,8 @@ dens <- density(z)
 data <- tibble(x = dens$x, y = dens$y) %>% 
   mutate(variable = case_when(
     (x >= -2 & x <= 0) ~ "On",
-    (x >= 0.2 & x <= 1) ~ "Off"))
+    (x >= 0.2 & x <= 1) ~ "Off",
+    TRUE ~ NA_character_))
 #> Warning: package 'bindrcpp' was built under R version 3.4.4
 
 ggplot(data, aes(x, y)) + geom_line() +
@@ -180,10 +182,14 @@ ggplot(data, aes(x, y)) + geom_line() +
   geom_area(data = filter(data, variable == 'Off'), fill = 'light blue')
 
 
+ggplot(data, aes(x, y)) + geom_line() +
+  geom_area(data = data[,], fill = 'grey', alpha=0.2) + 
+  geom_area(data = data[,], fill = 'light blue', alpha=0.2)
 #                                              
 
 
 #  7. 연습문제. =============================================================================
+
 # 이항분포
 
 # 7-1) 다음의 문제가 베르누이 시행인지 판단하시오. (P 확률)
@@ -210,23 +216,24 @@ pbinom(2, size=20, prob=0.05)
 # dbinom(5, size=36, prob=5/36)
 5/36
 
-# 이항분포
+
+
+# 정규분포(정규분포에서는 dnorm이 잘 안나온다.)
 
 # 7-1) A라는 전구회사에서 생산하는 전구의 수명은 800일이고 
 #      표준편차는 40일인 정규분포를 따른다.
 #      이때 전구의 수명이 750이하일 확률을 구하시오.
 pnorm(750, mean=800, sd=40)
 
-
 # 7-2) 근무기간 평균이 11년, 분산이 16년인 정규분포 
 
 # 20년 이상 근무한 종업원의 비율
-1-pnorm(19, mean=11, sd=4)
+# (정규분포에서는 초과,이상 상관없이 구하고자하는 숫자를 넣는다. 실수 19.9999999999이렇게 할 수 없으니까.)
+1-pnorm(20, mean=11, sd=4)
 
 # 근무연수가 가장 오래된 10%의 종업원은 
 # 이 회사에서 몇 년 이상 근무했다고 볼 수 있는가. 
 qnorm(0.9, mean=11, sd=4) # 5년 이상.
-
 
 # 7-3) 수학성적 평균 70, 표준편차 8 (점수가 80이상 90이하)
 pnorm(90, mean=70, sd=8) - pnorm(80, mean=70, sd=8)
