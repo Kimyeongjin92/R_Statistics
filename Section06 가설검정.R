@@ -117,9 +117,9 @@ p.hat <- 0.5
 alpha <- 0.05
 n <- 100
 z <- qnorm(1-(alpha/2))
-ll <- p.hat - z*sqrt(p.hat*(1-p.hat)/n)
-ul <- p.hat + z*sqrt(p.hat*(1-p.hat)/n)
-ll ; ul
+a <- p.hat - z*sqrt(p.hat*(1-p.hat))/sqrt(n)
+b <- p.hat + z*sqrt(p.hat*(1-p.hat))/sqrt(n)
+b-a
 
 #2. 메뉴에 대한 선호도 고객 100명 임의추출. 4/5가 선호. 
 #   전체 고객의 선호도 P라고 할 떄, 모비율 P에 대한 신뢰도 95%의 신뢰구간을 구하시오.
