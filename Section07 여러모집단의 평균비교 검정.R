@@ -33,7 +33,6 @@ shapiro.test(iriss$Petal.Width) # P 굉장히 작다. 정규성 없음
 qqnorm(iriss$Petal.Width)
 qqline(iriss$Petal.Width)
 
-
 # 2) 등분산성 ( 그래프가 홀쭉한지 펑퍼짐한건지) 
 # 분산을 비교하기 위해서 F-test를 실시. 
 # var.test(y축 ~ x축)
@@ -52,6 +51,44 @@ t.test(data$weight ~ data$gender,
        var.equal=T)            # 분산이 같다는 가정하에서.
 # P(0.067)>0.05 같다.
 # 그러나 남자가 정규성을 띄지 않기 때문에 정확한 결론은 아니다. 
+
+
+### ================================================================================
+###  2. 서로 대응인 두 집단 (271Page) =============================================
+### ================================================================================
+
+
+# (좌측검정) 전 - 후 = 음수(가 나와야 효과가 있다) (대안가설 : 약을 먹고 몸무게가 늘어났다.)
+# (우측검정) 전 - 후 = 양수(가 나와야 효과가 있다) (대안가설 : 약을 먹고 몸무게가 늘어났다.)
+
+install.packages('PairedData')
+library(PairedData)
+data <- read.csv('01.anorexia.csv')
+str(data)
+
+install.packages('psych')
+library(psych)
+
+summary(data)
+describe(data)
+
+n <- length(data$Prior - data$Post)
+m <-   mean(data$Prior - data$Post)
+s <-     sd(data$Prior - data$Post)
+(t.t <- m/(s/sqrt(n)))
+
+t.test(data$Prior, data$Post, paired=T, alternative = "less")
+  
+alpha <- 0.05
+qt(alpha,df=16)
+pt(t.t,df=16)
+
+
+
+
+
+
+
 
 
 
