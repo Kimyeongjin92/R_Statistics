@@ -1,0 +1,227 @@
+---
+title: "[과제11] 분석 연습문제"
+author: "김영진"
+date: '2019 6 27(목) '
+output: html_document
+---
+
+# **2 Sample T-test 연습문제**
+## **1번**
+#### mtcars 데이터셋에서 자동차 기어 종류(am: 오토/수동)에 따른 <br> mpg의 차이가 통계적으로 유의한지 t-test를 통해 확인해 보시오.
+
+```{r}
+# 1) 정규성 등분산성 검토
+am0 <- mtcars[mtcars$am == 0,] 
+shapiro.test(am0$mpg); qqnorm(am0$mpg); qqline(am0$mpg, col="red")  # P(0.8987)>0.05 : 정규성을 이룬다.   
+
+am1 <- mtcars[mtcars$am == 1,]
+shapiro.test(am1$mpg); qqnorm(am1$mpg); qqline(am1$mpg, col="red")  # P(0.5363)>0.05 : 정규성을 이룬다.           
+
+var.test(mtcars$mpg ~ mtcars$am) # P(0.06691)>0.05 : 분산이 동일하다.
+
+# 2) 가설 수립
+# H0 수동과 오토의 mpg는 차이가 없다(같다)
+# H1 수동과 오토의 mpg는 차이가 있다(다르다)
+
+# 3) 판정
+t.test(mtcars$mpg ~ mtcars$am,   # P(0.000285)<0.05 오토와 수동의 mpg는 다르다(차이가 있다.).
+       mu = 0,
+       var.equal=T)
+
+mean(am0$mpg) ; sd(am0$mpg) ; length(am0$mpg)
+mean(am1$mpg) ; sd(am1$mpg) ; length(am1$mpg)
+
+# 4) 결론
+# am0 19개의 평균 mpg는 17.14 ±3.833
+# am1 13개의 평균 mpg는 24.49 ±6.166
+# 유의수준 0.05에서 가설검정하면 
+# 검정통계량 (t=-4.1061) 유의확률 (p-value=0.000285)
+# 오토와 수동의 mpg는 차이가 있다 (통계적으로 유의하다)
+
+```
+
+## **2번**
+#### MASS의 Cars93 생산국(Origin) USA vs non-USA 차가격(price)의 평균이 차이가 있는가
+
+```{r}
+library(MASS)
+
+# 1) 정규성 등분산성 검토
+USA<-subset(Cars93, Origin=='USA')
+shapiro.test(USA$Price) ;qqnorm(USA$Price) ;qqline(USA$Price, col="red") # P(0.0002)<0.05 : 정규성을 이루지 않는다.
+             
+non<-subset(Cars93, Origin=='non-USA')
+shapiro.test(non$Price) ;qqnorm(non$Price) ;qqline(non$Price, col="red") # P(0.0002)<0.05 : 정규성을 이루지 않는다.
+
+var.test(Cars93$Price ~ Cars93$Origin) # P(0.01387)<0.05 분산이 서로 동일하지 않다.
+
+# 2) 가설 수립
+# H0 USA vs non-USA 차가격 평균의 차이가 없다 (같다)
+# H1 USA vs non-USA 차가격 평균의 차이가 있다 (다르다)
+
+# 3) 판정
+t.test(Cars93$Price ~ Cars93$Origin,   # P(0.34)>0.05 평균의 차이가 없다.
+       mu = 0,
+       var.equal=F)
+
+mean(USA$Price) ; sd(USA$Price) ; length(USA$Price)
+mean(non$Price) ; sd(non$Price) ; length(non$Price)
+
+# 4) 결론
+# USA 48개의 평균 Price는 18.57 ±7.81
+# NON 45개의 평균 Price는 20.50 ±11.3
+# 유의수준 0.05에서 가설검정하면 
+# 검정통계량 (t=-0.95449) 유의확률 (p-value=0.3428)
+# USA와 non-USA의 Price의 평균은 차이가 없다 (통계적으로 유의하지 않다.)
+
+```
+
+
+## **3-1번**
+#### subcompact 자동차와 midsize 자동차의 고속도로 연비 검정
+
+```{r}
+library(ggplot2)
+
+# 1) 정규성 등분산성 검토
+subcompact <- subset(mpg, mpg$class=='subcompact')
+shapiro.test(subcompact$hwy); qqnorm(subcompact$hwy); qqline(subcompact$hwy, col="red") # P(0.01036)<0.05 : 정규성을 이루지 않는다.
+            
+midsize    <- subset(mpg, mpg$class=='midsize')
+shapiro.test(midsize$hwy); qqnorm(midsize$hwy) ;qqline(midsize$hwy, col="red") # P(0.01311)<0.05 :정규성을 이루지 않는다.
+
+sm<-rbind(subcompact,midsize)
+var.test(sm$hwy ~ sm$class)  # P(8.825e-08)<0.05 분산이 서로 동일하지 않다.
+
+# 2) 가설 수립
+# H0 subcompact와 midsize의 고속도로 연비는 차이가 없다(같다)
+# H1 subcompact와 midsize의 고속도로 연비는 차이가 있다(다르다)
+
+# 3) 판정
+t.test(sm$hwy ~ sm$class,            # P(0.38)>0.05 고속도로 연비의 차이가 없다.
+       mu = 0,
+       var.equal=F)
+
+mean(subcompact$hwy) ; sd(subcompact$hwy) ; length(subcompact$hwy)
+mean(midsize$hwy) ; sd(midsize$hwy) ; length(midsize$hwy)
+
+# 4) 결론
+# subcompact 28개의 평균 hwy는 28.14 ±5.37
+# midsize    41개의 평균 hwy는 27.29 ±2.13
+# 유의수준 0.05에서 가설검정하면 
+# 검정통계량 (t=-0.87842) 유의확률 (p-value=0.3846)
+# subcompact와 midsize의 평균 hwy는 차이가 없다 (통계적으로 유의하지 않다.)
+```
+
+## **3-2번**
+#### 일반 휘발유(r)와 고급 휘발유(p)의 도시 연비(cty) 검정
+
+```{r}
+# 1) 정규성 등분산성 검토
+r <- subset(mpg, fl=='r')
+shapiro.test(r$cty);qqnorm(r$cty) ;qqline(r$cty, col="red") # P(2.7e-05)<0.05 :정규성을 이루지 않는다.
+
+p <- subset(mpg, fl=='p')
+shapiro.test(p$cty); qqnorm(p$cty);qqline(p$cty, col="red") # P(0.498)<0.05 :정규성을 이루지 않으나 근접하다..
+
+rp<-rbind(r,p)
+var.test(rp$cty ~ rp$fl) # P(0.0428)<0.05 분산이 서로 동일하지 않다. 
+
+# 2) 가설 수립
+# H0 일반 휘발유(r)와 고급 휘발유(p)의 도시 연비(cty)는 차이가 없다(같다)
+# H1 일반 휘발유(r)와 고급 휘발유(p)의 도시 연비(cty)는 차이가 있다(다르다)
+
+# 3) 판정
+t.test(rp$cty ~ rp$fl, # P(0.228)>0.05 도시 연비는 차이가 없다(같다)
+       mu = 0,
+       var.equal=F)
+
+mean(r$cty) ; sd(r$cty) ; length(r$cty)
+mean(p$cty) ; sd(p$cty) ; length(p$cty)
+
+# 4) 결론
+# 일반휘발유(r) 168개의 평균 cty는 16.7381 ±3.88
+# 고급휘발유(p) 52개의  평균 cty는 17.3653 ±3.04
+# 유의수준 0.05에서 가설검정하면 
+# 검정통계량 (t=1.2118) 유의확률 (p-value=0.2283)
+# 일반휘발유와 고급휘발유의 평균 cty는 차이가 없다 (통계적으로 유의하지 않다.)
+```
+
+## **3-3번**
+#### subcompact 자동차의 전륜구동(f)이냐 후륜구동(r)이냐에 따른 도시연비(cty) 검정
+
+```{r}
+# 1) 정규성 등분산성 검토
+subcompact <- subset(mpg, mpg$class=='subcompact')
+f <- subset(subcompact, drv=='f')
+shapiro.test(f$cty);qqnorm(f$cty) ;qqline(f$cty, col="red") # P(0.09599)>0.05 :정규성을 이룬다.
+
+r <- subset(subcompact, drv=='r')
+shapiro.test(r$cty); qqnorm(r$cty);qqline(r$cty, col="red") # P(0.1048)>0.05 :정규성을 이룬다.
+
+rf<-rbind(r,f)
+var.test(rf$cty ~ rf$drv) # P(0.0026)<0.05 분산이 서로 동일하지 않다. 
+
+# 2) 가설 수립
+# H0 전륜 구동(f)와 후륜 구동(r)의 차이가 없다(같다)
+# H0 전륜 구동(f)와 후륜 구동(r)의 차이가 있다(다르다)
+
+# 3) 판정
+t.test(rf$cty ~ rf$drv, # P(1.759e-06)<0.05 도시 연비는 차이가 있다(다르다)
+       mu = 0,
+       var.equal=F)
+
+mean(f$cty) ; sd(f$cty) ; length(f$cty)
+mean(r$cty) ; sd(r$cty) ; length(r$cty)
+
+# 4) 결론
+# 전륜구동(f) 22개의 평균 cty는 22.36 ±4.52
+# 후륜구동(r) 9개의  평균 cty는 15.88 ±1.45
+# 유의수준 0.05에서 가설검정하면 
+# 검정통계량 (t=6.003) 유의확률 (p-value=1.759e-06)
+# 전륜구동(f)와 후륜구동(r)의 평균 cty는 차이가 있다 (통계적으로 유의하다)
+```
+
+# **Paired Sample T-test 연습문제**
+## **1번**
+#### 새로운 당뇨병 치료제를 개발한 제약사에서는 치료에 지대한 영향을 주는 외부요인을 통제하기 위해 10명의 당뇨병 환자를 선별하여 1달 동안 '위약(placebo)'을 투여한 기간의 혈당 수치(Xi)와 '신약(new medicine)'을 투여한 1달 기간 동안의 혈당 수치(Yi)를 측정하여 짝을 이루어 혈당 차이를 유의수준 5%에서 비교하시오.
+```{r}
+
+```
+  
+    
+      
+## **2번**
+#### 두 종류의 신발 밑창의 원재료가 닳는 정도가 차이가 있는지를 검정하기 위해서 10명의 소년에게 한쪽은 A라는 원재료로 만든 신발을 신기고, 다른 한쪽은 B라는 원재료로 만든 신발을 신긴 후에, 일정 기간이 지난후에 신발을 수거하여 10명의 각 소년의 왼쪽 신발 밑창의 닳은 정도와 오른쪽 신발 밑창의 닳은 정도의 차이를 비교하여 두 종류 원재료의 재질이 다른지를 검정하시오.
+
+```{r}
+
+```
+
+# **일원 분산분석(One way ANOVA) 연습문제**
+## **1번**
+#### 다음은 3개 호수의 산소량의 차이가 있는지 없는지 알아보기 위하여 각 호수에서 10곳을 선택하여 수심 1m의 물로부터 산소량(ppm)을 측정한 자료이다. 3개 호수의 산소량이 같다고 할 수 있는가?
+
+```{r}
+
+```
+
+## **2번**
+#### 다음은 3개 채소에 대한 도매시장 7곳의 가격이다.3개 채소의 가격이 같다고 할 수 있는가?
+```{r}
+
+```
+
+# **적합도/독립성 검정 연습문제**
+## **1번**
+#### 어느 공정의 부적합품률은 15% 이다. 시료 80개를 추출하여 검사한 결과 불량이 16개이다.유의수준 5%로 적합도 검정을 하시오.
+```{r}
+
+```
+
+## **2번**
+#### 다음은 음주량과 흡연량 데이터이다.이 표로부터 음주량과 흡연량 사이에 연관이 있는지 확인하시오.
+```{r}
+
+```
+

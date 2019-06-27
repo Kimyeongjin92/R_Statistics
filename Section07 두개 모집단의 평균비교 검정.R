@@ -45,6 +45,8 @@ var.test(data$weight ~ data$gender)
 #     H1 다르다(한쪽 검정 : 혹은 크거나 작다)
 #    Two Sample T
 
+# t.test(종속변수~독립변수) :
+# y=f(x)처럼 x가 독립(일반적으로 x는 범주형) y가 종속(일반적으로 y는 연속형이다.)
 t.test(data$weight ~ data$gender,
        mu=0, 
        alternative="less", 
@@ -85,12 +87,79 @@ pt(t.t,df=16)
 
 
 ### ================================================================================
-###  3. 연습문제 2-Samplt T 테스트 =============================================
+###  3. 모집단이 세 개 이상 (276Page) =============================================
+### ================================================================================
+
+# 데이터 준비하기.
+ad <- read.csv('D:/dudwlsrla92/R_Statistics/ch07/age.data.csv')
+str(ad)
+ad$score <- ifelse(ad$score == 99, NA, ad$score)
+ad$scale <- factor(ad$scale)
+ad$sex   <- factor(ad$sex)
+
+y1       <- ad$age[ad$scale=="1"]
+y2       <- ad$age[ad$scale=="2"]
+y3       <- ad$age[ad$scale=="3"]
+
+# 오차 제곱합 구하기.
+y1.mean <- mean(y1)
+y2.mean <- mean(y2)
+y3.mean <- mean(y3)
+
+sse.1   <- sum((y1 - y1.mean)^2)
+sse.2   <- sum((y2 - y2.mean)^2)
+sse.3   <- sum((y3 - y3.mean)^2)
+sse     <- sse.1 + sse.2 + sse.3
+dfe     <- (length(y1)-1) + (length(y2)-1) + (length(y3)-1) 
+
+# 처리 제곱합 구하기.
+y.mean  <- mean(ad$age)
+
+sst.1   <- length(y1) * sum((y1.mean - y.mean)^2)
+sst.2   <- length(y2) * sum((y2.mean - y.mean)^2)
+sst.3   <- length(y3) * sum((y3.mean - y.mean)^2)
+sst     <- sst.1 + sst.2 + sst.3
+dft     <- length(levels(ad$scale)) - 1
+
+# 검정통계량 구하기.
+mst     <- sst / dft
+mse     <- sse / dfe
+f.t     <- mst / mse
+
+# 기각역을 위한 임계값 구하기.
+alpha   <- 0.05
+qf(1-alpha,2,147) # f.t(0.366)가 3.05보다 작으니까 왼쪽(즉 h0 채택역에 있다)
+
+# 유의 확률 구하기
+P.value <- 1 - pf(f.t,2,147)
+
+# R을 통한 p-value 구하기: lm(), oneway.test()
+ow <- lm(age~scale, data=ad)
+anova(ow)    # Pr(>F) 가 P-value로서 차이가 없다.
+# 위 : Between Treatment Scale
+# 밑 : within  Error     Residuals
+
+oneway.test(age~scale, data=ad, var.equal=T)
+# 지역규모에 따라 나이의 평균은 차이가 나지 않는 것으로 나타난다.
+
+
+# 그림그리기
+x  <- seq(0, 4, by=0.01)
+yf <-  df(x, 2, 147)
+par(mar=c(2,1,1,1))
+plot(x, yf, type="l",ylim=c(-0.1,1), xlab="",ylab="",axes=F)
+abline(h=0)
+tol.r <- round(tol,2)....
+
+
+
+
+### ================================================================================
+###  3. 연습문제 2-Samplt T 테스트 ================================================
 ### ================================================================================
 
 #  1) mtcars 기어종류 am(오토/수동)에 따른 mpg의 차이가 통계적으로 유의한가.
-# H0 수동과 오토의 mpg는 차이가 없다(같다)
-# H1 수동과 오토의 mpg는 차이가 있다(다르다)
+
 am1 <- mtcars[mtcars$am == 1,] 
 shapiro.test(am1$mpg)            # P(0.5363)>0.05
 qqnorm(am1$mpg)                  # 정규성을 이룬다.
@@ -101,8 +170,10 @@ shapiro.test(am0$mpg)            # P(0.8987)>0.05
 qqnorm(am0$mpg)                  # 정규성을 이룬다.
 qqline(am0$mpg)
 
-var.test(mtcars$mpg ~ mtcars$am) # P(0.06691)>0.05 #분산이 서로 동일하다.
+var.test(mtcars$mpg ~ mtcars$am) # P(0.06691)>0.05 #분산이 서로 
 
+# H0 수동과 오토의 mpg는 차이가 없다(같다)
+# H1 수동과 오토의 mpg는 차이가 있다(다르다)
 t.test(mtcars$mpg ~ mtcars$am,   # P(0.000285)<0.05 오토와 수동의 mpg는 다르다(차이가 있다.).
        mu = 0,
        var.equal=T)
@@ -186,3 +257,25 @@ t.test(rp$cty ~ rp$fl,          # P(0.228)>0.05 도시 연비는 차이가 없�
 #  3-3) subcompact 자동차의 전륜구동(f)이냐 후륜구동(r)이냐에 따른 도시연비 검정
 # H0 전륜 구동(f)와 후륜 구동(r)의 차이가 없다(같다)
 # H0 전륜 구동(f)와 후륜 구동(r)의 차이가 있다(다르다)
+
+## **3-3번**
+#### subcompact 자동차의 전륜구동(f)이냐 후륜구동(r)이냐에 따른 도시연비 검정
+
+```{r}
+# 1) 정규성 등분산성 검토
+
+
+# 2) 가설 수립
+# H0 전륜 구동(f)와 후륜 구동(r)의 차이가 없다(같다)
+# H0 전륜 구동(f)와 후륜 구동(r)의 차이가 있다(다르다)
+
+# 3) 판정
+
+
+# 4) 결론
+# am0 19개의 평균 mpg는 17.14 ±3.833
+# am1 13개의 평균 mpg는 24.49 ±6.166
+# 유의수준 0.05에서 가설검정하면 
+# 검정통계량 (t=-4.1061) 유의확률 (p-value=0.000285)
+# 오토와 수동의 mpg는 차이가 있다 (통계적으로 유의하다)
+```
