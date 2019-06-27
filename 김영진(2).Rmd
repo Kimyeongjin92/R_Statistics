@@ -186,6 +186,11 @@ mean(r$cty) ; sd(r$cty) ; length(r$cty)
 ## **1번**
 #### 새로운 당뇨병 치료제를 개발한 제약사에서는 치료에 지대한 영향을 주는 외부요인을 통제하기 위해 10명의 당뇨병 환자를 선별하여 1달 동안 '위약(placebo)'을 투여한 기간의 혈당 수치(Xi)와 '신약(new medicine)'을 투여한 1달 기간 동안의 혈당 수치(Yi)를 측정하여 짝을 이루어 혈당 차이를 유의수준 5%에서 비교하시오.
 ```{r}
+data <- data.frame(placebo = c(51.4, 52, 45.5, 54.5, 52.3, 50.9, 52.7, 50.3, 53.8, 53.1),
+                   medicine = c(50.1, 51.5, 45.9, 53.1, 51.8, 50.3, 52, 49.9, 52.5, 53))
+
+t.test(data$placebo, data$medicine, paired=T, alternative = "greater",conf.level=0.95)
+
 
 ```
   
