@@ -33,11 +33,32 @@ r.xy <- cov.xy / (sd(hf.son$Father)* sd(hf.son$Height)) ; r.xy
 # R 함수를 이용한 상관계수
 cor(hf.son$Father, hf.son$Height) # 0.39정도의 관계를 갖고있다.
 
+# 그래프
+plot(hf.son$Height,hf.son$Father)
+
 ### ================================================================================
 ###  2. 회귀분석 (335Page)    =====================================================
 ### ================================================================================
 
+# 회귀계수의 추정
+mean.x <- mean(hf.son$Father)
+mean.y <- mean(hf.son$Height)
+
+sxy    <- sum((hf.son$Father - mean.x)*(hf.son$Height - mean.y))
+sxx    <- sum((hf.son$Father - mean.x)^2)
+
+b1     <- sxy / sxx             # 0.448
+b0     <- mean.y - b1 * mean.x  # 38.259
+
+# 아들의 키 = [0.448(b1: 계수)*아버지의 키(father) + 38.259(b0: 절편)] (절편과 계수 y=ax+b)
 
 
+# lm() 함수 이용
+out    <- lm(Height ~ Father, data=hf.son)
+summary(out) # *** 굉장히 유의하다. 둘다 전부 유의하다.
+# Residuals          : 회귀선형을 기준으로 각 데이터마다의 오차들의 거리를 나타낸 상자그림 (Error)
+# Coefficients       : 절편과 계수
+# adjusted R-squared : 내가 만든 회귀식이 이 전체 모형의 15.13%를 설명한다는 뜻
 
 
+# 좋은 
